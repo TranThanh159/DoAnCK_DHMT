@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sweater shiba
+* source:	https://sketchfab.com/3d-models/sweater-shiba-4552e4d3123049809f202efd17619e6f
+* author:	kempasaurus100 (https://sketchfab.com/kempasaurus100)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sweater shiba" (https://sketchfab.com/3d-models/sweater-shiba-4552e4d3123049809f202efd17619e6f) by kempasaurus100 (https://sketchfab.com/kempasaurus100) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
