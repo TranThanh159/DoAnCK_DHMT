@@ -28,66 +28,135 @@ const Orbit = new OrbitControls(camera, renderer.domElement);
 
 //Tạo ánh sáng nền
 
-//points, lines, solid
+//Thông tin của các khối
 var boxInfo = {
-    solid: true,
-    lines: false,
-    points: false,
-    scale: 1,
+    width: 5,
+    height: 5,
+    depth: 5,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+
 }
 
+var sphereInfo = {
+    radius: 5,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+
+}
+
+var coneInfo = {
+    radius: 3,
+    height: 6,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+}
+
+var cylinderInfo = {
+    radiusTop: 3,
+    radiusBot: 3,
+    height: 4,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+}
+
+var torusInfo = {
+    radius: 5,
+    tube: 2,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+}
+
+var teapotInfo = {
+    size: 5,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+
+}
+
+var capsuleInfo = {
+    radius: 3,
+    length: 5,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+}
+
+var torusKnotInfo = {
+    radius: 5,
+    tube: 1,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+
+}
+
+var planeInfo = {
+    width: 30,
+    height: 30,
+    x_position: 0, y_position: 0, z_position: 0,
+    x_rotation: 0, y_rotation: 0, z_rotation: 0,
+    x_scaling: 1, y_scaling: 1, z_scaling: 1,
+
+}
+
+//Thông tin Camera
+var cameraInfo = {
+    x_position: 10,
+    y_position: 10,
+    z_position: 10,
+}
+
+
+
 //Tạo vật thể
-const box = getBox(5, 5, 5, boxInfo);
-const cone = getCone(2, 4);
-const sphere = getSphere(2);
-const cylinder = getCylinder(2, 2, 4);
-const torus  = getTorus(2, 1);
-const teapot = getTeapot(1, 2);
-const capsule = getCapsule(1, 4);
-const ring = getRing(1, 3);
-const plane = getPlane(100, 100);
+var boxGeo = new THREE.BoxGeometry(boxInfo.width, boxInfo.height, boxInfo.depth);
+var boxList = getMaterialandAddScene(scene, boxGeo);
+var sphereGeo = new THREE.SphereGeometry(sphereInfo.radius);
+var sphereList = getMaterialandAddScene(scene, sphereGeo);
+var coneGeo = new THREE.ConeGeometry(coneInfo.radius, coneInfo.height);
+var coneList = getMaterialandAddScene(scene, coneGeo);
+var cylinderGeo = new THREE.CylinderGeometry(cylinderInfo.radiusTop, cylinderInfo.radiusBot, cylinderInfo.height);
+var cylinderList = getMaterialandAddScene(scene, cylinderGeo);
+var torusGeo = new THREE.TorusGeometry(torusInfo.radius, torusInfo.tube);
+var torusList = getMaterialandAddScene(scene, torusGeo);
+var teapotGeo = new TeapotGeometry(teapotInfo.size);
+var teapotList = getMaterialandAddScene(scene, teapotGeo);
 
+var capsuleGeo = new THREE.CapsuleGeometry(capsuleInfo.radius, capsuleInfo.length);
+var capsuleList = getMaterialandAddScene(scene, capsuleGeo);
+var torusKnotGeo = new THREE.TorusKnotGeometry(torusKnotInfo.radius, torusKnotInfo.tube)
+var torusKnotList = getMaterialandAddScene(scene, torusKnotGeo);
+var planeGeo = new THREE.PlaneGeometry(planeInfo.width, planeInfo.height);
+var planeList = getMaterialandAddScene(scene, planeGeo);
 
-//Thêm vào cảnh
-scene.add(box);
-scene.add(cone);
-scene.add(sphere)
-scene.add(cylinder);
-scene.add(torus);
-scene.add(teapot);
-scene.add(capsule);
-scene.add(ring);
-scene.add(plane);
+//Thay đổi thuộc tính cho plane để dễ nhìn hơn
+planeList.solid.material.side = THREE.DoubleSide;
+planeList.point.material.side = THREE.DoubleSide;
 
+//Gom thông tin các đối tượng
+const objectGeo = [boxGeo, sphereGeo, coneGeo, cylinderGeo, torusGeo, teapotGeo, capsuleGeo, torusKnotGeo, planeGeo]
+const objectInfo = [boxInfo, sphereInfo, coneInfo, cylinderInfo, torusInfo, teapotInfo, capsuleInfo, torusKnotInfo, planeInfo]
+const objectList = [boxList, sphereList, coneList, cylinderList, torusList, teapotList, capsuleList, torusKnotList, planeList]
+const objectName = ['Box', 'Sphere', 'Cone', 'Cylinder', 'Torus', 'Teapot', 'Capsule', 'TorusKnot', 'Plane']
 
 //dat.gui
 const gui = new dat.GUI();
-const guiBox = gui.addFolder('Box');
-guiBox.add(boxInfo, 'solid').onChange((boxInfo)=>{!boxInfo.solid});
-guiBox.add(boxInfo, 'lines').onChange((boxInfo)=>{!boxInfo.lines});
-guiBox.add(boxInfo, 'points').onChange((boxInfo)=>{!boxInfo.points});
-guiBox.add(boxInfo, 'scale', 0, 10);
-guiBox.addColor(box.material, 'color');
-guiBox.add(box.material, 'visible');
-guiBox.add(box.material, 'wireframe');
-// guiBox.add(box.material, 'points');
+var object_mat_affineGui = gui.addFolder('Object, Material, Affine');
+for(let i=0; i<objectName.length; i++){
+    buildGui(object_mat_affineGui, objectName[i], objectInfo[i], objectList[i]);
+}
 
+//dat.gui camera
+//Không cần vì có OrbitControl
+var cameraGui = gui.addFolder('Camera (using OrbitControls)');
 
-//Thiết lập vị trí
-box.position.set(0, 0 , 0);
-cone.position.set(5, 0, 0);
-sphere.position.set(10, 0, 0);
-cylinder.position.set(15, 0, 0);
-torus.position.set(20, 0, 0);
-teapot.position.set(25, 0, 0);
-capsule.position.set(30, 0, 0);
-ring.position.set(35, 0, 0);
-plane.position.set(0, -3, 0);
-
-//Rotation
-plane.rotation.set(-Math.PI/2, 0, 0);
-torus.rotation.set(-Math.PI/2, 0, 0);
-ring.rotation.set(-Math.PI/2, 0, 0);
 
 // //Load model có sẵn từ tập tin
 // const gltfloader = new GLTFLoader();
@@ -122,124 +191,68 @@ ring.rotation.set(-Math.PI/2, 0, 0);
 
 //Hàm animation
 function animate(){
-    //Scale
-    box.scale.set(boxInfo.scale, boxInfo.scale, boxInfo.scale);
+
+    //Biến đổi affine gồm Tịnh tiến, Quay, Tỉ lệ lên từng object
+    for(let i=0; i<objectName.length; i++){
+        renderAffine(objectInfo[i], objectList[i]);
+    }
+
+    //Phép chiếu phối cảnh, thay đổi vị trí (x, y, z) và lookAt (near, far)
+    //camera.position.set(cameraInfo.x_position, cameraInfo.y_position, cameraInfo.z_position);
+    //Có orbitControls
+    Orbit.update();
+    // camera.lookAt(cameraInfo.x_lookAt, cameraInfo.y_lookAt, cameraInfo.z_lookAt);
 
     //Kết xuất
-    Orbit.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
 animate();
 
-//Tạo hình hộp
-function getBox(width, height, depth, boxInfo){
-    const geo = new THREE.BoxGeometry(width, height, depth);
-
-    const mesh = getMaterialAndMesh(geo, boxInfo);
-    return mesh;
-}
-
-//Tạo hình cầu
-function getSphere(radius){
-    const geo = new THREE.SphereGeometry(radius);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(255, 0, 0)',
+//Hàm thực hiện tạo material và mesh tương ứng, sau đó add vào scene
+function getMaterialandAddScene(scene, geo){
+    const mat_solid = new THREE.MeshBasicMaterial({
+        visible: false,
+    });
+    const mat_point = new THREE.PointsMaterial({
+        visible: false,
     });
 
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
+    var mesh_solid = new THREE.Mesh(geo, mat_solid);
+    var mesh_point = new THREE.Points(geo, mat_point);
 
+    scene.add(mesh_solid);
+    scene.add(mesh_point);
+
+    return {solid: mesh_solid, point: mesh_point}
 }
 
-//Tạo hình nón
-function getCone(radius, height){
-    const geo = new THREE.ConeGeometry(radius, height);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(0, 255, 0)',
-    })
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
+//Hàm thực hiện build dat.gui cho mỗi vật thể
+function buildGui(gui, nameFolder, boxInfo, boxList){
+    const boxGui = gui.addFolder(nameFolder);
+    boxGui.add(boxList.solid.material, 'visible').name('solid');
+    boxGui.add(boxList.solid.material, 'wireframe').name('lines');
+    boxGui.add(boxList.point.material, 'visible').name('points');
+    var boxPosition = boxGui.addFolder('Transform');
+    boxPosition.add(boxInfo, 'x_position', -20, 20).name('position x');
+    boxPosition.add(boxInfo, 'y_position', -20, 20).name('position y');
+    boxPosition.add(boxInfo, 'z_position', -20, 20).name('position z');
+    var boxRotation = boxGui.addFolder('Rotation');
+    boxRotation.add(boxInfo, 'x_rotation', -20, 20).name('rotation x');
+    boxRotation.add(boxInfo, 'y_rotation', -20, 20).name('rotation y');
+    boxRotation.add(boxInfo, 'z_rotation', -20, 20).name('rotation z');
+    var boxScaling = boxGui.addFolder('Scaling');
+    boxScaling.add(boxInfo, 'x_scaling', -20, 20).name('scaling x');
+    boxScaling.add(boxInfo, 'y_scaling', -20, 20).name('scaling y');
+    boxScaling.add(boxInfo, 'y_scaling', -20, 20).name('scaling z');
 }
 
-//Tạo hình trụ
-function getCylinder(radiusTop, radiusBot, height){
-    const geo = new THREE.CylinderGeometry(radiusTop, radiusBot, height);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(0, 0, 255)',
-    })
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
+//Hàm thực hiện render các phép biến đổi Affine
+function renderAffine(boxInfo, boxList){
+    boxList.solid.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
+    boxList.point.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
+    boxList.solid.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
+    boxList.point.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
+    boxList.solid.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
+    boxList.point.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
 }
-
-//Tạo hình bánh xe
-function getTorus(radius, tube){
-    const geo = new THREE.TorusGeometry(radius, tube);
-    const mat = new THREE.MeshBasicMaterial({
-        color: "rgb(255, 255, 0)"
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-//Tạo hình ấm trà
-function getTeapot(size, segment){
-    const geo = new TeapotGeometry(size, segment);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(0, 255, 255)'
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-//Tạo hình tự tìm hiểu
-function getCapsule(radius, length){
-    const geo = new THREE.CapsuleGeometry(radius, length);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(255, 0, 255)',
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-function getRing(innerRadius, outerRadius){
-    const geo = new THREE.RingGeometry(innerRadius, outerRadius);
-    const mat = new THREE.MeshBasicMaterial();
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-function getPlane(width, height){
-    const geo = new THREE.PlaneGeometry(width, height);
-    const mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(60, 60, 60)'
-    });
-
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-//Hàm lựa chọn kiểu vẽ
-function getMaterialAndMesh(geo, guiInfo){
-    var mat = NaN;
-    var mesh = NaN;
-    mat = new THREE.MeshBasicMaterial({
-        color: 'rgb(255, 255, 0)',
-        visible: true,
-        wireframe: false,
-        
-    });
-
-    mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-}
-
-
-
-
