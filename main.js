@@ -146,48 +146,41 @@ const objectInfo = [boxInfo, sphereInfo, coneInfo, cylinderInfo, torusInfo, teap
 const objectList = [boxList, sphereList, coneList, cylinderList, torusList, teapotList, capsuleList, torusKnotList, planeList]
 const objectName = ['Box', 'Sphere', 'Cone', 'Cylinder', 'Torus', 'Teapot', 'Capsule', 'TorusKnot', 'Plane']
 
+
 //dat.gui
 const gui = new dat.GUI();
 var object_mat_affineGui = gui.addFolder('Object, Material, Affine');
 for(let i=0; i<objectName.length; i++){
     buildGui(object_mat_affineGui, objectName[i], objectInfo[i], objectList[i]);
 }
-
+var modelGui = object_mat_affineGui.addFolder('Available model');
 //dat.gui camera
 //Không cần vì có OrbitControl
 var cameraGui = gui.addFolder('Camera (using OrbitControls)');
 
-
 // //Load model có sẵn từ tập tin
-// const gltfloader = new GLTFLoader();
+const gltfloader = new GLTFLoader();
+gltfloader.load(
+	// resource URL
+	'available_model/shiba.glb',
+	// called when the resource is loaded
+	function ( glb ) {
+        var model = glb.scene;
+        model.position.set(0, 0, 0);
+        model.scale.set(5, 5, 5);
+        modelGui.add(model, 'visible').name('shiba');
+        scene.add( model );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
 
-// // Optional: Provide a DRACOLoader instance to decode compressed mesh data
-// const dracoLoader = new DRACOLoader();
-// dracoLoader.setDecoderPath( 'three/examples/jsm/libs/draco/' );
-// gltfloader.setDRACOLoader( dracoLoader );
-
-// gltfloader.load(
-// 	// resource URL
-// 	'available_model/shiba/scene.gltf',
-// 	// called when the resource is loaded
-// 	function ( gltf ) {
-
-//         gltf.scene.position.set(-10, 0, 0);
-//         scene.add( gltf.scene );
-// 	},
-// 	// called while loading is progressing
-// 	function ( xhr ) {
-
-// 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-// 	},
-// 	// called when loading has errors
-// 	function ( error ) {
-
-// 		console.log( 'An error happened' );
-
-// 	}
-// );
 
 //Hàm animation
 function animate(){
@@ -233,26 +226,31 @@ function buildGui(gui, nameFolder, boxInfo, boxList){
     boxGui.add(boxList.solid.material, 'visible').name('solid');
     boxGui.add(boxList.solid.material, 'wireframe').name('lines');
     boxGui.add(boxList.point.material, 'visible').name('points');
+
     var boxPosition = boxGui.addFolder('Transform');
     boxPosition.add(boxInfo, 'x_position', -20, 20).name('position x');
     boxPosition.add(boxInfo, 'y_position', -20, 20).name('position y');
     boxPosition.add(boxInfo, 'z_position', -20, 20).name('position z');
+
     var boxRotation = boxGui.addFolder('Rotation');
     boxRotation.add(boxInfo, 'x_rotation', -20, 20).name('rotation x');
     boxRotation.add(boxInfo, 'y_rotation', -20, 20).name('rotation y');
     boxRotation.add(boxInfo, 'z_rotation', -20, 20).name('rotation z');
+
     var boxScaling = boxGui.addFolder('Scaling');
     boxScaling.add(boxInfo, 'x_scaling', -20, 20).name('scaling x');
     boxScaling.add(boxInfo, 'y_scaling', -20, 20).name('scaling y');
-    boxScaling.add(boxInfo, 'y_scaling', -20, 20).name('scaling z');
+    boxScaling.add(boxInfo, 'z_scaling', -20, 20).name('scaling z');
 }
 
 //Hàm thực hiện render các phép biến đổi Affine
 function renderAffine(boxInfo, boxList){
     boxList.solid.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
     boxList.point.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
+
     boxList.solid.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
     boxList.point.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
+
     boxList.solid.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
     boxList.point.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
 }
