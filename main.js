@@ -146,7 +146,6 @@ const objectInfo = [boxInfo, sphereInfo, coneInfo, cylinderInfo, torusInfo, teap
 const objectList = [boxList, sphereList, coneList, cylinderList, torusList, teapotList, capsuleList, torusKnotList, planeList]
 const objectName = ['Box', 'Sphere', 'Cone', 'Cylinder', 'Torus', 'Teapot', 'Capsule', 'TorusKnot', 'Plane']
 
-
 //dat.gui
 const gui = new dat.GUI();
 var object_mat_affineGui = gui.addFolder('Object, Material, Affine');
@@ -158,18 +157,72 @@ var modelGui = object_mat_affineGui.addFolder('Available model');
 //Không cần vì có OrbitControl
 var cameraGui = gui.addFolder('Camera (using OrbitControls)');
 
-// //Load model có sẵn từ tập tin
-const gltfloader = new GLTFLoader();
-gltfloader.load(
+//light for mushroom and soccer ball
+var ambientLightForModel = new THREE.AmbientLight(0xffffff, 1);
+ambientLightForModel.visible = false;
+modelGui.add(ambientLightForModel, 'visible').name('lighting for seeing model');
+scene.add(ambientLightForModel);
+
+//Load model có sẵn từ tập tin
+//Gồm 3 model: shiba, mushroom, ball
+const gltfloader1 = new GLTFLoader();
+gltfloader1.load(
 	// resource URL
 	'available_model/shiba.glb',
 	// called when the resource is loaded
 	function ( glb ) {
-        var model = glb.scene;
-        model.position.set(0, 0, 0);
-        model.scale.set(5, 5, 5);
-        modelGui.add(model, 'visible').name('shiba');
-        scene.add( model );
+        var shiba = glb.scene;
+        shiba.position.set(0, 0, 0);
+        shiba.scale.set(7, 7, 7);
+        shiba.visible = false;
+        modelGui.add(shiba, 'visible').name('shiba');
+        scene.add( shiba );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
+
+var gltfloader2 = new GLTFLoader();
+gltfloader2.load(
+	// resource URL
+	'available_model/fly_agaric_mushroom.glb',
+	// called when the resource is loaded
+	function ( glb2 ) {
+        var mushroom = glb2.scene;
+        mushroom.position.set(0, 0, 0);
+        mushroom.scale.set(0.05, 0.05, 0.05);
+        mushroom.visible = false;
+        modelGui.add(mushroom, 'visible').name('mushroom');
+        scene.add( mushroom );
+	},
+	// called while loading is progressing
+	function ( xhr ) {
+		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+	},
+	// called when loading has errors
+	function ( error ) {
+		console.log( 'An error happened' );
+	}
+);
+
+var gltfloader3 = new GLTFLoader();
+gltfloader3.load(
+	// resource URL
+	'available_model/soccer_ball.glb',
+	// called when the resource is loaded
+	function ( glb3 ) {
+        var ball = glb3.scene;
+        ball.position.set(0, 0, 0);
+        ball.scale.set(3, 3, 3);
+        ball.visible = false;
+        modelGui.add(ball, 'visible').name('soccer ball');
+        scene.add( ball );
 	},
 	// called while loading is progressing
 	function ( xhr ) {
