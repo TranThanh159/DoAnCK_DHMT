@@ -165,18 +165,18 @@ scene.add(ambientLightForModel);
 
 //Load model có sẵn từ tập tin
 //Gồm 3 model: shiba, mushroom, ball
-const gltfloader1 = new GLTFLoader();
-gltfloader1.load(
+const gltfloader = new GLTFLoader();
+gltfloader.load(
 	// resource URL
 	'available_model/shiba.glb',
 	// called when the resource is loaded
 	function ( glb ) {
-        var shiba = glb.scene;
-        shiba.position.set(0, 0, 0);
-        shiba.scale.set(7, 7, 7);
-        shiba.visible = false;
-        modelGui.add(shiba, 'visible').name('shiba');
-        scene.add( shiba );
+        var model = glb.scene;
+        model.position.set(0, 0, 0);
+        model.scale.set(7, 7, 7);
+        model.visible = false;
+        modelGui.add(model, 'visible').name('shiba');
+        scene.add( model );
 	},
 	// called while loading is progressing
 	function ( xhr ) {
@@ -188,18 +188,17 @@ gltfloader1.load(
 	}
 );
 
-var gltfloader2 = new GLTFLoader();
-gltfloader2.load(
+gltfloader.load(
 	// resource URL
 	'available_model/fly_agaric_mushroom.glb',
 	// called when the resource is loaded
-	function ( glb2 ) {
-        var mushroom = glb2.scene;
-        mushroom.position.set(0, 0, 0);
-        mushroom.scale.set(0.05, 0.05, 0.05);
-        mushroom.visible = false;
-        modelGui.add(mushroom, 'visible').name('mushroom');
-        scene.add( mushroom );
+	function ( glb ) {
+        var model = glb.scene;
+        model.position.set(0, 0, 0);
+        model.scale.set(0.05, 0.05, 0.05);
+        model.visible = false;
+        modelGui.add(model, 'visible').name('mushroom');
+        scene.add( model );
 	},
 	// called while loading is progressing
 	function ( xhr ) {
@@ -211,18 +210,17 @@ gltfloader2.load(
 	}
 );
 
-var gltfloader3 = new GLTFLoader();
-gltfloader3.load(
+gltfloader.load(
 	// resource URL
 	'available_model/soccer_ball.glb',
 	// called when the resource is loaded
-	function ( glb3 ) {
-        var ball = glb3.scene;
-        ball.position.set(0, 0, 0);
-        ball.scale.set(3, 3, 3);
-        ball.visible = false;
-        modelGui.add(ball, 'visible').name('soccer ball');
-        scene.add( ball );
+	function ( glb ) {
+        var model = glb.scene;
+        model.position.set(0, 0, 0);
+        model.scale.set(3, 3, 3);
+        model.visible = false;
+        modelGui.add(model, 'visible').name('soccer ball');
+        scene.add( model );
 	},
 	// called while loading is progressing
 	function ( xhr ) {
