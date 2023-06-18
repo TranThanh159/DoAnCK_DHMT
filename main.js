@@ -352,7 +352,7 @@ pokemonBallMesh.rotation.set(Math.PI/2, -Math.PI/2, Math.PI/2);
 planeOfPokemonBallMesh.rotation.set(-Math.PI/2, 0, 0);
 planeOfPokemonBallMesh.side = THREE.DoubleSide;
 centerOfTurnAround.position.set(0, 0, 0);
-animationObjectGroup.visible = true;
+animationObjectGroup.visible = false;
 
 
 //Chuẩn bị thông số
@@ -365,7 +365,7 @@ var trigger = {
 
 //dat.gui cho animation
 var animationGui = gui.addFolder('Animation');
-animationGui.add(planeOfPokemonBallMesh, 'visible').name('object');
+animationGui.add(animationObjectGroup, 'visible').name('object');
 animationGui.add(trigger, 'jump');
 animationGui.add(trigger, 'roll');
 animationGui.add(trigger, 'turn_around').name('turn around');
@@ -373,7 +373,7 @@ animationGui.add(trigger, 'turn_around').name('turn around');
 //Hàm thực hiện Nhảy
 var time;
 function animateJump(){
-    centerOfTurnAround.translateY(Math.sin(2*time)/2);
+    centerOfTurnAround.position.y = Math.sin(5*time)*5 + 5;
 }
 
 //Hàm thực hiện Lăn
