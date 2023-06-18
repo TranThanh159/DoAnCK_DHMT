@@ -10,6 +10,7 @@ const scene = new THREE.Scene();
 
 //Tạo kết xuất
 const renderer = new THREE.WebGLRenderer();
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -148,7 +149,7 @@ const objectName = ['Box', 'Sphere', 'Cone', 'Cylinder', 'Torus', 'Teapot', 'Cap
 
 //dat.gui
 const gui = new dat.GUI();
-var object_mat_affineGui = gui.addFolder('Object, Material, Affine');
+var object_mat_affineGui = gui.addFolder('Object, Material and Affine');
 for(let i=0; i<objectName.length; i++){
     buildGui(object_mat_affineGui, objectName[i], objectInfo[i], objectList[i]);
 }
@@ -233,6 +234,98 @@ gltfloader.load(
 );
 
 
+
+//------------------------------------------------
+//Chiếu sáng và Texture
+//Thực hiện Texture
+var textureLoader = new THREE.TextureLoader();
+var textureEarth = textureLoader.load('./texture/earth.jpg');
+var texturePokemonBall = textureLoader.load('./texture/pokemon_ball.jpg');
+var textureSnowBall = textureLoader.load('./texture/snow_ball.jpg');
+
+//Vật thể và mặt phẳng
+const sphereLightingGeo = new THREE.SphereGeometry(5 );
+const sphereLightingMat = new THREE.MeshPhongMaterial({
+    map: textureEarth,
+});
+var sphereLightingMesh = new THREE.Mesh(sphereLightingGeo, sphereLightingMat);
+
+const planeLightingGeo = new THREE.PlaneGeometry(100, 100);
+const planeLightingMat = new THREE.MeshPhongMaterial();
+var planeLightingMesh = new THREE.Mesh(planeLightingGeo, planeLightingMat);
+
+var objectLightMesh = new THREE.Object3D();
+planeLightingMesh.add(sphereLightingMesh);
+objectLightMesh.add(sphereLightingMesh);
+objectLightMesh.add(planeLightingMesh);
+
+objectLightMesh.visible = false;
+
+//Các loại ánh sáng
+var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+var hemisphereLight = new THREE.HemisphereLight(0xffffff, 0.5);
+var pointLight = new THREE.PointLight(0xffffff, 0.5);
+var spotLight = new THREE.SpotLight(0xffffff, 0.5);
+var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+
+var sphereOfLighting1 = getSphereOfLighting();
+var sphereOfLighting2 = getSphereOfLighting();
+var sphereOfLighting3 = getSphereOfLighting();
+var sphereOfLighting4 = getSphereOfLighting();
+
+directionalLight.add(sphereOfLighting1);
+hemisphereLight.add(sphereOfLighting2);
+pointLight.add(sphereOfLighting3);
+spotLight.add(sphereOfLighting4);
+
+//Thay đổi vị trí chiếu sáng
+directionalLight.position.set(0, 20, 0);
+hemisphereLight.position.set(0, 20, 0);
+pointLight.position.set(0, 20, 0);
+spotLight.position.set(0, 20, 0);
+ambientLight.position.set(0, 20, 0);
+
+//Điều chỉnh thông số cho phù hợp 
+sphereLightingMesh.castShadow = true;
+sphereLightingMesh.position.set(0, 6, 0);
+planeLightingMesh.receiveShadow = true;
+planeLightingMesh.rotation.set(-Math.PI/2, 0, 0);
+planeLightingMesh.side = THREE.DoubleSide;
+directionalLight.castShadow = true;
+hemisphereLight.castShadow = true;
+pointLight.castShadow = true;
+spotLight.castShadow = true;
+
+//Thiết lập visible = false
+directionalLight.visible = false;
+hemisphereLight.visible = false;
+pointLight.visible = false;
+spotLight.visible = false;
+ambientLight.visible = false;
+
+//add object, lighting váo scene
+scene.add(objectLightMesh);
+scene.add(directionalLight);
+scene.add(hemisphereLight);
+scene.add(pointLight);
+scene.add(spotLight);
+scene.add(ambientLight);
+
+//dat.gui cho Lighting and Texture
+var lighting_textureGui = gui.addFolder('Lighting and Texture');
+lighting_textureGui.add(objectLightMesh, 'visible').name('object');
+var lightingGui = lighting_textureGui.addFolder('Lighting');
+lightingGui.add(directionalLight, 'visible').name('directional light');
+lightingGui.add(hemisphereLight, 'visible').name('hemisphere light');
+lightingGui.add(pointLight, 'visible').name('point light');
+lightingGui.add(spotLight, 'visible').name('spot light');
+lightingGui.add(ambientLight, 'visible').name('ambient light');
+
+
+
+
+
+//-------------------------------------------------------------------
 //Hàm animation
 function animate(){
 
@@ -243,9 +336,10 @@ function animate(){
 
     //Phép chiếu phối cảnh, thay đổi vị trí (x, y, z) và lookAt (near, far)
     //camera.position.set(cameraInfo.x_position, cameraInfo.y_position, cameraInfo.z_position);
+    //camera.lookAt(cameraInfo.x_lookAt, cameraInfo.y_lookAt, cameraInfo.z_lookAt);
     //Có orbitControls
     Orbit.update();
-    // camera.lookAt(cameraInfo.x_lookAt, cameraInfo.y_lookAt, cameraInfo.z_lookAt);
+    
 
     //Kết xuất
     renderer.render(scene, camera);
@@ -258,24 +352,29 @@ function getMaterialandAddScene(scene, geo){
     const mat_solid = new THREE.MeshBasicMaterial({
         visible: false,
     });
+    const mat_line = new THREE.LineBasicMaterial({
+        visible: false,
+    })
     const mat_point = new THREE.PointsMaterial({
         visible: false,
     });
 
     var mesh_solid = new THREE.Mesh(geo, mat_solid);
+    var mesh_line = new THREE.Line(geo, mat_line);
     var mesh_point = new THREE.Points(geo, mat_point);
 
     scene.add(mesh_solid);
+    scene.add(mesh_line);
     scene.add(mesh_point);
 
-    return {solid: mesh_solid, point: mesh_point}
+    return {solid: mesh_solid, line: mesh_line, point: mesh_point}
 }
 
 //Hàm thực hiện build dat.gui cho mỗi vật thể
 function buildGui(gui, nameFolder, boxInfo, boxList){
     const boxGui = gui.addFolder(nameFolder);
     boxGui.add(boxList.solid.material, 'visible').name('solid');
-    boxGui.add(boxList.solid.material, 'wireframe').name('lines');
+    boxGui.add(boxList.line.material, 'visible').name('lines');
     boxGui.add(boxList.point.material, 'visible').name('points');
 
     var boxPosition = boxGui.addFolder('Transform');
@@ -297,11 +396,24 @@ function buildGui(gui, nameFolder, boxInfo, boxList){
 //Hàm thực hiện render các phép biến đổi Affine
 function renderAffine(boxInfo, boxList){
     boxList.solid.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
+    boxList.line.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
     boxList.point.position.set(boxInfo.x_position, boxInfo.y_position, boxInfo.z_position);
 
     boxList.solid.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
+    boxList.line.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
     boxList.point.rotation.set(boxInfo.x_rotation, boxInfo.y_rotation, boxInfo.z_rotation);
 
     boxList.solid.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
+    boxList.line.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
     boxList.point.scale.set(boxInfo.x_scaling, boxInfo.y_scaling, boxInfo.z_scaling);
+}
+
+//Hàm giúp tạo ra cầu chỉ vị trí ánh sáng
+function getSphereOfLighting(){
+    var Geo = new THREE.SphereGeometry(0.5);
+    var Mat = new THREE.MeshBasicMaterial({
+        color: 'rgb(255, 255, 0)'
+    });
+    var Mesh = new THREE.Mesh(Geo, Mat);
+    return Mesh;
 }
