@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { TeapotGeometry } from '/node_modules/three/examples/jsm/geometries/TeapotGeometry.js';
 import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from '/node_modules/three/examples/jsm/loaders/DRACOLoader.js'
 import * as dat from 'dat.gui';
 
 //Tạo cảnh
@@ -26,6 +25,7 @@ camera.position.set(0, 30, 30);
 
 //Thêm OrbitControl
 const Orbit = new OrbitControls(camera, renderer.domElement);
+const clock = new THREE.Clock();
 
 //Tạo ánh sáng nền
 
@@ -235,13 +235,11 @@ gltfloader.load(
 
 
 
-//------------------------------------------------
+//---------------------------------------------------------
 //Chiếu sáng và Texture
 //Thực hiện Texture
 var textureLoader = new THREE.TextureLoader();
 var textureEarth = textureLoader.load('./texture/earth.jpg');
-var texturePokemonBall = textureLoader.load('./texture/pokemon_ball.jpg');
-var textureSnowBall = textureLoader.load('./texture/snow_ball.jpg');
 
 //Vật thể và mặt phẳng
 const sphereLightingGeo = new THREE.SphereGeometry(5 );
@@ -323,10 +321,74 @@ lightingGui.add(ambientLight, 'visible').name('ambient light');
 
 
 
+//-------------------------------------------------------------------
+//Animation cho vật thể
+var texturePokemonBall = textureLoader.load('./texture/pokemon_ball.jpg');
+var textureSnowBall = textureLoader.load('./texture/snow_ball.jpg');
+
+var pokemonBallGeo = new THREE.SphereGeometry(5);
+var pokemonBallMat = new THREE.MeshBasicMaterial({
+    map: texturePokemonBall,
+});
+var pokemonBallMesh = new THREE.Mesh(pokemonBallGeo, pokemonBallMat);
+
+var planeOfPokemonBallGeo = new THREE.PlaneGeometry(50, 50);
+var planeOfPokemonBallMat = new THREE.MeshBasicMaterial({
+    color: 'rgb(150, 150, 150)',
+});
+var planeOfPokemonBallMesh = new THREE.Mesh(planeOfPokemonBallGeo, planeOfPokemonBallMat);
+var centerOfTurnAround = new THREE.Object3D();
+var animationObjectGroup = new THREE.Object3D();
+
+//Add vật thể với nhau
+centerOfTurnAround.add(pokemonBallMesh);
+animationObjectGroup.add(planeOfPokemonBallMesh);
+animationObjectGroup.add(centerOfTurnAround);
+scene.add(animationObjectGroup);
+
+//Thay đổi thông số cho phù hợp
+pokemonBallMesh.position.set(10, 5, 0);
+pokemonBallMesh.rotation.set(Math.PI/2, -Math.PI/2, Math.PI/2);
+planeOfPokemonBallMesh.rotation.set(-Math.PI/2, 0, 0);
+planeOfPokemonBallMesh.side = THREE.DoubleSide;
+centerOfTurnAround.position.set(0, 0, 0);
+animationObjectGroup.visible = true;
+
+
+//Chuẩn bị thông số
+var trigger = {
+    jump: false,
+    roll: false,
+    turn_around: false,
+}
+
+
+//dat.gui cho animation
+var animationGui = gui.addFolder('Animation');
+animationGui.add(planeOfPokemonBallMesh, 'visible').name('object');
+animationGui.add(trigger, 'jump');
+animationGui.add(trigger, 'roll');
+animationGui.add(trigger, 'turn_around').name('turn around');
+
+//Hàm thực hiện Nhảy
+var time;
+function animateJump(){
+    centerOfTurnAround.translateY(Math.sin(2*time)/2);
+}
+
+//Hàm thực hiện Lăn
+function animateRoll(){
+    pokemonBallMesh.rotateZ(-Math.PI/24);
+}
+
+//Hàm thực hiện Xoay tròn
+function animateTurnAround(){
+    centerOfTurnAround.rotateY(-Math.PI/32);
+}
 
 
 //-------------------------------------------------------------------
-//Hàm animation
+//Hàm animate để thực hiện render 
 function animate(){
 
     //Biến đổi affine gồm Tịnh tiến, Quay, Tỉ lệ lên từng object
@@ -339,6 +401,17 @@ function animate(){
     //camera.lookAt(cameraInfo.x_lookAt, cameraInfo.y_lookAt, cameraInfo.z_lookAt);
     //Có orbitControls
     Orbit.update();
+
+
+    //Thêm animation cho vật thể
+    time = clock.getElapsedTime();
+
+    if(trigger.jump)
+        animateJump();
+    if(trigger.roll)
+        animateRoll();
+    if(trigger.turn_around)
+        animateTurnAround();
     
 
     //Kết xuất
@@ -377,7 +450,7 @@ function buildGui(gui, nameFolder, boxInfo, boxList){
     boxGui.add(boxList.line.material, 'visible').name('lines');
     boxGui.add(boxList.point.material, 'visible').name('points');
 
-    var boxPosition = boxGui.addFolder('Transform');
+    var boxPosition = boxGui.addFolder('Translation');
     boxPosition.add(boxInfo, 'x_position', -20, 20).name('position x');
     boxPosition.add(boxInfo, 'y_position', -20, 20).name('position y');
     boxPosition.add(boxInfo, 'z_position', -20, 20).name('position z');
