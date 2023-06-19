@@ -1,3 +1,4 @@
+cd DOANCK_DHMT
 npm install --save three
 npm install --save-dev vite
 npm install --save dat.gui
