@@ -1,5 +1,4 @@
 # DoAnCK_DHMT
-![Uploading image.png…]()
 # Hướng dẫn chạy đồ án
 Đồ án được chạy trên node.js version v18.16.0 và VITE v4.3.9
 
