@@ -42,7 +42,7 @@ var boxInfo = {
 
 var sphereInfo = {
     radius: 5,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 20, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 
@@ -51,7 +51,7 @@ var sphereInfo = {
 var coneInfo = {
     radius: 3,
     height: 6,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 40, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 }
@@ -60,7 +60,7 @@ var cylinderInfo = {
     radiusTop: 3,
     radiusBot: 3,
     height: 4,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 60, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 }
@@ -68,14 +68,14 @@ var cylinderInfo = {
 var torusInfo = {
     radius: 5,
     tube: 2,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 80, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 }
 
 var teapotInfo = {
     size: 5,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 100, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 
@@ -84,7 +84,7 @@ var teapotInfo = {
 var capsuleInfo = {
     radius: 3,
     length: 5,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 120, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 }
@@ -92,7 +92,7 @@ var capsuleInfo = {
 var torusKnotInfo = {
     radius: 5,
     tube: 1,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 140, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 
@@ -101,7 +101,7 @@ var torusKnotInfo = {
 var planeInfo = {
     width: 30,
     height: 30,
-    x_position: 0, y_position: 0, z_position: 0,
+    x_position: 160, y_position: 0, z_position: 0,
     x_rotation: 0, y_rotation: 0, z_rotation: 0,
     x_scaling: 1, y_scaling: 1, z_scaling: 1,
 
@@ -173,7 +173,7 @@ gltfloader.load(
 	// called when the resource is loaded
 	function ( glb ) {
         var model = glb.scene;
-        model.position.set(0, 0, 0);
+        model.position.set(-20, 0, 0);
         model.scale.set(7, 7, 7);
         model.visible = false;
         modelGui.add(model, 'visible').name('shiba');
@@ -195,7 +195,7 @@ gltfloader.load(
 	// called when the resource is loaded
 	function ( glb ) {
         var model = glb.scene;
-        model.position.set(0, 0, 0);
+        model.position.set(-40, 0, 0);
         model.scale.set(0.05, 0.05, 0.05);
         model.visible = false;
         modelGui.add(model, 'visible').name('mushroom');
@@ -217,7 +217,7 @@ gltfloader.load(
 	// called when the resource is loaded
 	function ( glb ) {
         var model = glb.scene;
-        model.position.set(0, 0, 0);
+        model.position.set(-60, 0, 0);
         model.scale.set(3, 3, 3);
         model.visible = false;
         modelGui.add(model, 'visible').name('soccer ball');
