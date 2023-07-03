@@ -410,7 +410,7 @@ function animate(){
         animateJump();
     if(trigger.roll)
         animateRoll();
-    if(trigger.turn_around)
+    if(trigger.spin_around)
         animateSpinAround();
     
 
