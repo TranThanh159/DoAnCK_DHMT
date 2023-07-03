@@ -368,7 +368,7 @@ var animationGui = gui.addFolder('Animation');
 animationGui.add(animationObjectGroup, 'visible').name('object');
 animationGui.add(trigger, 'jump');
 animationGui.add(trigger, 'roll');
-animationGui.add(trigger, 'turn_around').name('turn around');
+animationGui.add(trigger, 'spin_around').name('spin around');
 
 //Hàm thực hiện Nhảy
 var time;
@@ -382,7 +382,7 @@ function animateRoll(){
 }
 
 //Hàm thực hiện Xoay tròn
-function animateTurnAround(){
+function animateSpinAround(){
     centerOfTurnAround.rotateY(-Math.PI/32);
 }
 
@@ -411,7 +411,7 @@ function animate(){
     if(trigger.roll)
         animateRoll();
     if(trigger.turn_around)
-        animateTurnAround();
+        animateSpinAround();
     
 
     //Kết xuất
