@@ -359,7 +359,7 @@ animationObjectGroup.visible = false;
 var trigger = {
     jump: false,
     roll: false,
-    turn_around: false,
+    spin_around: false,
 }
 
 
